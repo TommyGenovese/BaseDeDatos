@@ -1,0 +1,55 @@
+CC = gcc -g
+CFLAGS = -Wall -Wextra -pedantic #-ansi
+LDLIBS = -lodbc
+
+all: menu tester
+
+menu: menu.o utils.o
+	$(CC) -o $@ $^ $(LDLIBS)
+
+tester: tester.o utils.o checkUtils.o checkCreateTable.o checkReplaceExtensionByIdx.o checkCreateIndex.o checkPrint.o checkFindKey.o checkAddIndexEntry.o
+	$(CC) -o $@ $^ $(LDLIBS)
+
+menu.o: menu.c utils.h
+	$(CC) $(CFLAGS) -c $< -o $@
+
+utils.o: utils.c utils.h
+	$(CC) $(CFLAGS) -c $< -o $@
+
+checkUtils.o: checkUtils.c utils.h
+	$(CC) $(CFLAGS) -c $< -o $@
+
+checkCreateTable.o: checkCreateTable.c utils.h
+	$(CC) $(CFLAGS) -c $< -o $@
+
+checkReplaceExtensionByIdx.o: checkReplaceExtensionByIdx.c utils.h
+	$(CC) $(CFLAGS) -c $< -o $@
+
+checkCreateIndex.o: checkCreateIndex.c utils.h
+	$(CC) $(CFLAGS) -c $< -o $@
+
+checkPrint.o: checkPrint.c utils.h
+	$(CC) $(CFLAGS) -c $< -o $@
+
+checkFindKey.o: checkFindKey.c utils.h
+	$(CC) $(CFLAGS) -c $< -o $@
+
+checkAddIndexEntry.o: checkAddIndexEntry.c utils.h
+	$(CC) $(CFLAGS) -c $< -o $@
+
+clean:
+	rm -f *.o core $(EXE)
+	rm menu
+	rm tester
+
+rm_databases:
+	rm -f *.dat
+	rm -f *.idx
+
+clean_all: clean rm_databases
+
+run_menu:
+	@./menu
+
+run_tester:
+	@./tester
